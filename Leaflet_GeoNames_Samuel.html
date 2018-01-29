@@ -37,7 +37,7 @@
             center:[42, 2] /*Es el centro del mapa*/
           });
   
-          L.tileLayer('//{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
+          L.tileLayer('htpp://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
             attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
             subdomains: 'abcd',
             maxZoom: 17, /*cargamos un titlelayer*/
@@ -46,7 +46,7 @@
   
   
           function peticionTerremotos() { /*en esta funcion llamo a una peticion a geo names*/
-            var peticion = 'http://api.geonames.org/earthquakesJSON?' + /*earquatesJason cambiaria en otro ejemplo*/
+            var peticion = 'htpps://secure.geonames.org/earthquakesJSON?' + /*earquatesJason cambiaria en otro ejemplo*/
               'north=' + map.getBounds()._northEast.lat + '&' +
               'south=' + map.getBounds()._southWest.lat + '&' +  
               'east=' + map.getBounds()._northEast.lng + '&' + /*get bound te manda una caja de coordenadas*/
