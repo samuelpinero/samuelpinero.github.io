@@ -7,8 +7,8 @@
     <meta name="author" content="autor" />
     <meta name="description" content="descripción página">
     <meta name="robots" content="index,follow">
-    <link rel="stylesheet" href="http://betaserver.icgc.cat/cesium/Cesium/Widgets/widgets.css" />
-    <script src="http://betaserver.icgc.cat/cesium/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="Cesium/Widgets/widgets.css" />
+    <script src="Cesium/Cesium.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
         #map {
@@ -37,8 +37,8 @@
     <script>
         var map;
         $(document).ready(function () {
-
             map = new Cesium.Viewer('map', {
+
                 imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
                     url: '//services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/',
                 }),
@@ -51,9 +51,10 @@
                 homeButton: false,
                 infoBox: true,
                 sceneModePicker: false,
-                animation: false,
-                geocoder: false, //al ponerla a true, te pone una lupa para buscar localizaciones
+                animation: false,  //quitamos todos los true que no nos interesa. Por defecto está todo en true.
+                geocoder: false, //es el buscador pero no nos funciona
                 sceneMode: Cesium.SceneMode.SCENE3D,
+
                 terrainProvider: new Cesium.CesiumTerrainProvider({
                     url: 'https://assets.agi.com/stk-terrain/world',
                     requestWaterMask: false,
@@ -63,7 +64,7 @@
             });
 
 
-            map.camera.flyTo({
+            map.camera.flyTo({ //cdo abres se situa donde pone las coordenadas
                 destination: Cesium.Cartesian3.fromDegrees(2.1806, 41.4003, 15000)
             });
 
