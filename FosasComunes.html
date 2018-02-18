@@ -1,0 +1,185 @@
+<<html lang="es">
+
+    <head>
+        <title>Fosas Comunes</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="autor" />
+        <meta name="description" content="descripción página">
+        <meta name="robots" content="index,follow">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            L_PREFER_CANVAS = true;
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+        <script src="https://calvinmetcalf.github.io/leaflet-ajax/dist/leaflet.ajax.js"></script>
+
+        <script src="js/leaflet-search.src.js"></script>
+        <link rel="stylesheet" href="css/leaflet-search.min.css" />
+
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            #map {
+                height: 100%;
+                width: 100%;
+            }
+
+            .legend {
+                opacity: 0.7;
+            }
+        </style>
+        <script>
+            var map, osm, esri;
+            var geojson, fosas;
+            var controlCapas;
+            var controlEscala;
+
+            $(document).ready(function () {
+
+                var BandosGuerra = ["Republicà", "Ambs", "Rebels"];
+                var color = ['#e26131', '#d0d378', '#78d3b0'];
+
+                map = L.map('map', {
+                    center: [41.827092, 1.541908],
+                    zoom: 8
+                });
+                icc = L.tileLayer(
+                    'https://tilemaps.icgc.cat/mapfactory/wmts/nit_topo_suau/CAT3857/{z}/{x}/{y}.png', {
+                        maxZoom: 12,
+                        minZoom: 1,
+                        attribution: 'ICC',
+                    }).addTo(map);
+
+                gris = L.tileLayer('https://tilemaps.icgc.cat/mapfactory/wmts/gris_topo_suau/CAT3857/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    minZoom: 1,
+                    attribution: 'OSM'
+                });
+
+
+
+                fosas = new L.GeoJSON.AJAX('datos/republicanos.geojson', {
+                    maxZoom: 19,
+                    minZoom: 14,
+                    onEachFeature: function (feature, layer) {
+                        popupContent = "<b>" + "Bando" + ":" + feature.properties.Bandol + "</b><br>" + "Tipus de fosa" + ":" + feature.properties.TipusFossa + "</b><br>" + "Clau" + ":" + feature.properties.Clau + "</b>";
+                        layer.bindPopup(popupContent);
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 3,
+                            fillColor: "#00FF00",
+                            color: "#00FF00",
+                            weight: 3,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                    }
+                }).addTo(map);
+
+                fosas1 = new L.GeoJSON.AJAX('datos/Ambos_bandos.geojson', {
+                    maxZoom: 19,
+                    minZoom: 14,
+                    onEachFeature: function (feature, layer) {
+                        popupContent = "<b>" + "Bando" + ":" + feature.properties.Bandol + "</b><br>" + "Tipus de fosa" + ":" + feature.properties.TipusFossa + "</b><br>" + "Clau" + ":" + feature.properties.Clau + "</b>";
+                        layer.bindPopup(popupContent);
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 3,
+                            fillColor: "#FF0000 ",
+                            color: "#FF0000 ",
+                            weight: 3,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                    }
+                }).addTo(map);
+
+                fosas2 = new L.GeoJSON.AJAX('datos/rebel.geojson', {
+                    maxZoom: 19,
+                    minZoom: 14,
+                    onEachFeature: function (feature, layer) {
+                        popupContent = "<b>" + "Bando" + ":" + feature.properties.Bandol + "</b><br>" + "Tipus de fosa" + ":" + feature.properties.TipusFossa + "</b><br>" + "Clau" + ":" + feature.properties.Clau + "</b>";
+                        layer.bindPopup(popupContent);
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 3,
+                            fillColor: "#FFFF00",
+                            color: "#FFFF00",
+                            weight: 3,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                    }
+                }).addTo(map);
+
+
+                var baseMaps = {
+                    "ICC": icc,
+                    "Mapa_gris": gris
+                };
+
+                var overlayMaps = {
+                    "fosas": fosas
+                };
+
+
+
+
+                controlCapas = L.control.layers(baseMaps, null);
+                controlCapas.addTo(map);
+                controlEscala = L.control.scale();
+                controlEscala.addTo(map);
+
+
+
+                var searchControl = new L.Control.Search({
+                    layer: fosas,
+                    propertyName: 'Bandol',
+                    circleLocation: true
+                });
+
+                map.addControl(searchControl);
+                L.Control.Watermark = L.Control.extend({
+                    onAdd: function (map) {
+                        var img = L.DomUtil.create('img');
+
+                        img.src = 'images/Fosas.png';
+                        img.style.width = '150px';
+                       
+
+                        return img;
+                    },
+
+                    onRemove: function (map) {
+                        // Nothing to do here
+                    }
+                });
+
+                L.control.watermark = function (opts) {
+                    return new L.Control.Watermark(opts);
+                }
+
+                L.control.watermark({ position: 'bottomleft' }).addTo(map);
+
+
+
+            });
+
+        </script>
+    </head>
+
+    <body>
+        <div id="map"></div>
+
+    </body>
+
+    </html>

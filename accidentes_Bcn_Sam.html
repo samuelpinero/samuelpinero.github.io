@@ -93,7 +93,7 @@
             mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtdWVscGluZXJvIiwiYSI6ImNqY2pndmtxeTBkcGwycWx4cmwxbGZod2MifQ.MTZlSpsGnJU55zkG8ApJsw'; //rsto viene de mi usuario de mapbox
             var map = new mapboxgl.Map({
                 container: 'map',
-                style: 'mapbox://styles/samuelpinero/cjd3ffkwo4ar12smnfsc0l7um',//viene de mi usuario
+                style: 'mapbox://styles/samuelpinero/cjdrk244z2guu2ss30tznaf9s',//viene de mi usuario
                 center: [2.16859, 41.3954],
                 zoom: 13,
                 hash: true,
@@ -104,7 +104,7 @@
             map.on('load', function () {
                 map.addSource("accidentes_source", {
                     type: "vector",
-                    url: "mapbox://samuelpinero.33gamaw2" //lo de mapbox se deja, pero lo otro viene de mi usuario de tileset
+                    url: "mapbox://samuelpinero.7lknubtw" //lo de mapbox se deja, pero lo otro viene de mi usuario de tileset
                 });  //fin map source
 
                 map.addLayer({
